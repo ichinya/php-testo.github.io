@@ -40,7 +40,7 @@ public function resolvesAfterDelay(): void
     $suspension = EventLoop::getSuspension();
     EventLoop::delay(0.1, static fn() => $suspension->resume('ready'));
 
-    Assert::same('ready', $suspension->suspend()); // цикл крутится, пока мы ждём
+    Assert::same($suspension->suspend(), 'ready'); // цикл крутится, пока мы ждём
 }
 ```
 

@@ -42,7 +42,7 @@ public function resolvesAfterDelay(): void
     $suspension = EventLoop::getSuspension();
     EventLoop::delay(0.1, static fn() => $suspension->resume('ready'));
 
-    Assert::same('ready', $suspension->suspend()); // the loop keeps spinning while we wait
+    Assert::same($suspension->suspend(), 'ready'); // the loop keeps spinning while we wait
 }
 ```
 

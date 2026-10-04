@@ -20,7 +20,7 @@ Data providers let you run one test with different sets of input data. Each set 
 #[DataSet([0, 0, 0])]
 public function testSum(int $a, int $b, int $expected): void
 {
-    Assert::same($expected, $a + $b);
+    Assert::same($a + $b, $expected);
 }
 ```
 </example>
@@ -46,7 +46,7 @@ public function testSum(int $a, int $b, int $expected): void { ... }
 public function testUserValidation(string $email, bool $expected): void
 {
     $isValid = $this->validator->validate($email);
-    Assert::same($expected, $isValid);
+    Assert::same($isValid, $expected);
 }
 
 public function userDataProvider(): iterable
@@ -122,7 +122,7 @@ The first item from the first provider joins with the first from the second, sec
 public function testUserPermissions(string $login, string $password, array $permissions): void
 {
     $user = $this->auth->login($login, $password);
-    Assert::same($permissions, $user->getPermissions());
+    Assert::same($user->getPermissions(), $permissions);
 }
 
 // credentials: [['admin', 'secret'], ['guest', '1234']]
@@ -261,7 +261,7 @@ For complex scenarios, providers can be nested:
 public function testAccessControl(string $user, string $role, bool $expected): void
 {
     $this->actAs($user)->withRole($role);
-    Assert::same($expected, $this->canAccess('/admin'));
+    Assert::same($this->canAccess('/admin'), $expected);
 }
 
 // users × roles produces all user-role combinations,

@@ -20,7 +20,7 @@
 public function orderCalculationIsStable(): void
 {
     $order = new Order([new Item('A', 10), new Item('B', 20)]);
-    Assert::same(30, $order->total());
+    Assert::same($order->total(), 30);
 }
 ```
 </example>
@@ -32,7 +32,7 @@ public function orderCalculationIsStable(): void
 public function externalServiceReturnsExpectedShape(): void
 {
     $response = HttpClient::get('https://api.example.com/users/1');
-    Assert::same(200, $response->statusCode);
+    Assert::same($response->statusCode, 200);
 }
 ```
 </example>

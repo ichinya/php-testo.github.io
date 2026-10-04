@@ -37,7 +37,7 @@ final class UserServiceTest
 
         $user = $service->create('Alice', 'alice@example.com');
 
-        Assert::same('Alice', $user->name);
+        Assert::same($user->name, 'Alice');
     }
 
     /**
@@ -66,7 +66,7 @@ public function rejectsAgesOutsideRange(int $age, bool $accepted): void
 {
     $service = new UserService(new InMemoryRepository());
 
-    Assert::same($accepted, $service->canRegister($age));
+    Assert::same($service->canRegister($age), $accepted);
 }
 ```
 
@@ -76,7 +76,7 @@ Reach for `\Testo\Data\DataProvider` when the cases need code to produce — gen
 #[DataProvider('emailFixtures')]
 public function validatesEmail(string $email, bool $expected): void
 {
-    Assert::same($expected, UserService::isValidEmail($email));
+    Assert::same(UserService::isValidEmail($email), $expected);
 }
 
 public static function emailFixtures(): iterable
@@ -116,7 +116,7 @@ When positive and negative cases come from separate providers, pair each with it
 #[Covers(UserService::class, 'isValidEmail')]
 public function validatesEmail(string $email, bool $expected): void
 {
-    Assert::same($expected, UserService::isValidEmail($email));
+    Assert::same(UserService::isValidEmail($email), $expected);
 }
 ```
 

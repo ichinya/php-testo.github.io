@@ -302,7 +302,7 @@ public function smokeTest(): void
 {
     // Тест выполнится, но покрытие не собирается
     $response = $this->app->get('/health');
-    Assert::same(200, $response->statusCode);
+    Assert::same($response->statusCode, 200);
 }
 ```
 </example>

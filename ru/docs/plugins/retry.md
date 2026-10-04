@@ -19,7 +19,7 @@
 public function flakyExternalService(): void
 {
     $response = HttpClient::get('https://api.example.com/health');
-    Assert::same(200, $response->statusCode);
+    Assert::same($response->statusCode, 200);
 }
 ```
 </example>

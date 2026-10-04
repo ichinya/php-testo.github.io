@@ -171,10 +171,10 @@ function gradeScore(int $score): string
 ```php
 public function testGrades(): void
 {
-    Assert::same('A', gradeScore(95));
-    Assert::same('B', gradeScore(85));
-    Assert::same('C', gradeScore(75));
-    Assert::same('F', gradeScore(50));
+    Assert::same(gradeScore(95), 'A');
+    Assert::same(gradeScore(85), 'B');
+    Assert::same(gradeScore(75), 'C');
+    Assert::same(gradeScore(50), 'F');
 }
 ```
 
@@ -197,9 +197,9 @@ public function testGrades(): void
 ```php
 public function testGradeBoundaries(): void
 {
-    Assert::same('A', gradeScore(90)); // нижняя граница A
-    Assert::same('B', gradeScore(80)); // нижняя граница B
-    Assert::same('C', gradeScore(70)); // нижняя граница C
+    Assert::same(gradeScore(90), 'A'); // нижняя граница A
+    Assert::same(gradeScore(80), 'B'); // нижняя граница B
+    Assert::same(gradeScore(70), 'C'); // нижняя граница C
 }
 ```
 

@@ -123,7 +123,7 @@ final class DatabaseTest
     public function insertsRecord(): void
     {
         self::$connection->insert('users', ['name' => 'John']);
-        Assert::same(1, self::$connection->count('users'));
+        Assert::same(self::$connection->count('users'), 1);
     }
 }
 ```

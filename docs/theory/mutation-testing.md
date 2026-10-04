@@ -171,10 +171,10 @@ Now write the "obvious" test suite, one test per branch:
 ```php
 public function testGrades(): void
 {
-    Assert::same('A', gradeScore(95));
-    Assert::same('B', gradeScore(85));
-    Assert::same('C', gradeScore(75));
-    Assert::same('F', gradeScore(50));
+    Assert::same(gradeScore(95), 'A');
+    Assert::same(gradeScore(85), 'B');
+    Assert::same(gradeScore(75), 'C');
+    Assert::same(gradeScore(50), 'F');
 }
 ```
 
@@ -197,9 +197,9 @@ Let's close it:
 ```php
 public function testGradeBoundaries(): void
 {
-    Assert::same('A', gradeScore(90)); // lower bound for A
-    Assert::same('B', gradeScore(80)); // lower bound for B
-    Assert::same('C', gradeScore(70)); // lower bound for C
+    Assert::same(gradeScore(90), 'A'); // lower bound for A
+    Assert::same(gradeScore(80), 'B'); // lower bound for B
+    Assert::same(gradeScore(70), 'C'); // lower bound for C
 }
 ```
 
