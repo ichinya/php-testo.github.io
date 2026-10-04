@@ -38,7 +38,7 @@ export default withMermaid(defineConfig({
       md.use(promptsBlockPlugin, { baseUrl })
     },
   },
-  srcExclude: ['CLAUDE.md', 'README.md'],
+  srcExclude: ['AGENTS.md', 'README.md'],
   ignoreDeadLinks: [/feed\.xml$/],
 
   vite: {
