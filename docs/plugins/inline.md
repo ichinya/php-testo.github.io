@@ -93,7 +93,7 @@ public function createUser(string $email): User
 In PHP 8.6 this becomes even more elegant with [partial application](https://wiki.php.net/rfc/partial_function_application_v2):
 
 ```php
-#[TestInline([10, 3], Assert::greaterThan(3, ?))]
+#[TestInline([10, 4], Assert::same(?, 2.5))]
 public function divide(int $a, int $b): float
 {
     return $a / $b;
