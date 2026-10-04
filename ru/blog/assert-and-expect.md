@@ -56,6 +56,10 @@ function simpleTest(): void
 
 Я решил начать как в библиотеке [webmozarts/assert](https://github.com/webmozarts/assert): раз нам больше не нужно писать `self::` или `$this->`, будем проще: `Assert::same()`. Порядок параметров я решил взять привычный, как у PHPUnit: сначала **$expected**, затем **$actual** (у webmozart первым параметром указывается проверяемое значение, а потом ожидаемое, что, в принципе, **выглядит более логичным**).
 
+::: info
+Позже Testo перешёл на прямой порядок: теперь <func>\Testo\Assert::same()</func> принимает сначала проверяемое значение, а затем ожидаемое.
+:::
+
 Пошло-поехало. Сделали `::same()`, `::notSame`, `::null()`, `::true()`, `::false()`, `::equals()`, `::notEquals()`.
 
 И вот мы дошли до функции `Assert::greaterThan()`. В PHPUnit порядок аргументов этой функции всё тот же: сначала **$expected**, затем **$actual**.
@@ -138,7 +142,7 @@ Expect::exception(Failure::class)
 #[Test]
 public function checkIterableTraitMethods(): void
 {
-    Assert::instanceOf(\DateTimeInterface::class, new \DateTimeImmutable());
+    Assert::instanceOf(new \DateTimeImmutable(), \DateTimeInterface::class);
     // Сокращение конструкции Assert::object($object)->instanceOf($class);
 
     Assert::int(15)->greaterThan(10);

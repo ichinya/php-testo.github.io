@@ -57,6 +57,10 @@ Sure, we could eventually create a hundred functions, a trait, and a base class 
 
 I decided to start like the [webmozarts/assert](https://github.com/webmozarts/assert) library: since we no longer need to write `self::` or `$this->`, let's keep it simple: `Assert::same()`. I chose the familiar PHPUnit parameter order: **$expected** first, then **$actual** (webmozart puts the value being checked first, then the expected value, which actually **looks more logical**).
 
+::: info
+Testo later switched to the direct order: <func>\Testo\Assert::same()</func> now takes the value being checked first and the expected one second.
+:::
+
 Off we went. Made `::same()`, `::notSame`, `::null()`, `::true()`, `::false()`, `::equals()`, `::notEquals()`.
 
 Then we got to `Assert::greaterThan()`. In PHPUnit, the argument order is the same: **$expected** first, then **$actual**.
@@ -137,7 +141,7 @@ So we made several of these pipe assertions.
 #[Test]
 public function checkIterableTraitMethods(): void
 {
-    Assert::instanceOf(\DateTimeInterface::class, new \DateTimeImmutable());
+    Assert::instanceOf(new \DateTimeImmutable(), \DateTimeInterface::class);
     // Shorthand for Assert::object($object)->instanceOf($class);
 
     Assert::int(15)->greaterThan(10);
