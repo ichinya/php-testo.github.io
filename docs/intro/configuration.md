@@ -77,6 +77,15 @@ new FinderConfig(
 )
 ```
 
+An excluded path drops everything beneath it, even when it sits above an include: `include: ['src/Domain']` with `exclude: ['src']` finds nothing. A file listed in `include` by name always stays in scope, even inside an excluded directory, so one file can be pulled back out of an excluded tree:
+
+```php
+new FinderConfig(
+    include: ['tests', 'tests/Fixtures/SharedFixture.php'],
+    exclude: ['tests/Fixtures'],
+)
+```
+
 ## Plugins
 
 Testo is built on [plugins](../plugins.md) — they define how tests are discovered, executed, and processed. Plugins are registered at two levels:
