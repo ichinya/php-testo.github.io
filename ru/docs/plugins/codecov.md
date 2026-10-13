@@ -241,14 +241,14 @@ return new ApplicationConfig(
 :::
 
 <signature h="3" name="#[\Testo\Codecov\Covers(string $classOrFunction, ?string $method = null)]">
-<short>Ограничивает, какой исходный код засчитывается в покрытие для данного теста.</short>
+<short>Ограничивает, какой исходный код засчитывается этому тесту.</short>
 <description>
-В отчёт попадут только строки, принадлежащие указанным классам, трейтам, enum-ам, методам или функциям. Всё остальное отбрасывается. Атрибут можно повторять: несколько <attr>\Testo\Codecov\Covers</attr> на одном тесте объединяются.
+Тесту засчитываются только строки указанных классов, трейтов, enum-ов, методов или функций. Всё остальное, что он выполнил, остаётся в отчёте непокрытым, если его не покрыл другой тест. Атрибут можно повторять: несколько <attr>\Testo\Codecov\Covers</attr> на одном тесте объединяются.
 
 При размещении на классе применяется ко всем тестам внутри.
 </description>
 <param name="$classOrFunction">Полное имя класса, трейта, enum-а (`UserService::class`, `Cacheable::class`, `OrderStatus::class`) или функции (`'App\Helpers\format_name'`).</param>
-<param name="$method">Имя метода внутри класса, трейта или enum-а. Если указано, в покрытие попадут только строки этого метода, а не всей сущности.</param>
+<param name="$method">Имя метода внутри класса, трейта или enum-а. Если указано, тесту засчитываются только строки этого метода, а не всей сущности.</param>
 <example>
 Покрытие для класса, трейта или enum-а — все исполняемые строки:
 
@@ -330,6 +330,33 @@ final class PaymentServiceTest extends BaseIntegrationTest
 ::: warning
 Использование <attr>\Testo\Codecov\Covers</attr> и <attr>\Testo\Codecov\CoversNothing</attr> на **одном уровне** — ошибка. Testo выбросит исключение с указанием конфликтующего теста. Разные уровни (например, <attr>\Testo\Codecov\CoversNothing</attr> на родительском классе и <attr>\Testo\Codecov\Covers</attr> на дочернем) — допустимы.
 :::
+
+### Исключение кода
+
+Бывает код, до которого тесты не доходят намеренно: защитная проверка, ветка под другую платформу, отладочный помощник. Его можно пометить аннотациями `@codeCoverageIgnore`, тогда он вовсе исчезнет из отчётов, а не будет висеть непокрытым:
+
+- `// @codeCoverageIgnore` исключает строку, на которой стоит. Кроме аннотации, в комментарии ничего быть не должно: `// @codeCoverageIgnore потому что…` не исключает ничего.
+- `// @codeCoverageIgnoreStart` и `// @codeCoverageIgnoreEnd` исключают все строки между собой, включая свои. `Start` без парного `End` не исключает ничего.
+- `@codeCoverageIgnore` в любом месте докблока класса, трейта, enum-а, функции или метода исключает всё объявление целиком.
+
+```php
+if ($handle === false) {
+    exit(1); // @codeCoverageIgnore
+}
+
+// @codeCoverageIgnoreStart
+if (\PHP_OS_FAMILY === 'Windows') {
+    $path = \strtolower($path);
+}
+// @codeCoverageIgnoreEnd
+
+/**
+ * @codeCoverageIgnore
+ */
+public function debugDump(): void { ... }
+```
+
+Аннотации действуют и в файлах, которые не загрузил ни один тест.
 
 ### Метаданные
 

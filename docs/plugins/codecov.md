@@ -1,7 +1,7 @@
 ---
 outline: [2, 4]
 llms: true
-llms_description: "Code coverage collection during tests. CodecovPlugin configuration with CoverageLevel (Line/Branch/Path), CoverageMode (IfAvailable/Always/Never), CLI flags --coverage/--no-coverage. Clover, Cobertura, and PHPUnit Coverage XML reports (the latter consumed by Infection for mutation testing). #[Covers] and #[CoversNothing] attributes for per-test coverage control. Source filtering via FinderConfig."
+llms_description: "Code coverage collection during tests. CodecovPlugin configuration with CoverageLevel (Line/Branch/Path), CoverageMode (IfAvailable/Always/Never), CLI flags --coverage/--no-coverage. Clover, Cobertura, and PHPUnit Coverage XML reports (the latter consumed by Infection for mutation testing). #[Covers] and #[CoversNothing] attributes for per-test coverage control. Source filtering via FinderConfig. @codeCoverageIgnore annotations leave code out of the reports."
 ---
 
 # Code Coverage
@@ -243,14 +243,14 @@ Include only the directories you need in `src` to filter out unnecessary files b
 :::
 
 <signature h="3" name="#[\Testo\Codecov\Covers(string $classOrFunction, ?string $method = null)]">
-<short>Restricts which source code counts toward coverage for this test.</short>
+<short>Restricts which source code this test is credited with.</short>
 <description>
-Only lines belonging to the specified classes, traits, enums, methods, or functions will be included in the report. Everything else is discarded. The attribute is repeatable: multiple <attr>\Testo\Codecov\Covers</attr> on the same test are combined.
+The test is credited only with lines belonging to the specified classes, traits, enums, methods, or functions. Whatever else it executed stays in the report as uncovered, unless another test covers it — a narrow <attr>\Testo\Codecov\Covers</attr> never hides code from the total. The attribute is repeatable: multiple <attr>\Testo\Codecov\Covers</attr> on the same test are combined.
 
 When placed on a class, applies to all tests within it.
 </description>
 <param name="$classOrFunction">Fully qualified class, trait, enum (`UserService::class`, `Cacheable::class`, `OrderStatus::class`), or function name (`'App\Helpers\format_name'`).</param>
-<param name="$method">Method name within the class, trait, or enum. When specified, only lines of that method are included, not the entire entity.</param>
+<param name="$method">Method name within the class, trait, or enum. When specified, the test is credited only with lines of that method, not the entire entity.</param>
 <example>
 Coverage for a class, trait, or enum — all executable lines:
 
@@ -332,6 +332,33 @@ final class PaymentServiceTest extends BaseIntegrationTest
 ::: warning
 Using <attr>\Testo\Codecov\Covers</attr> and <attr>\Testo\Codecov\CoversNothing</attr> on the **same level** is an error. Testo will throw an exception identifying the conflicting test. Different levels (e.g., <attr>\Testo\Codecov\CoversNothing</attr> on the parent class and <attr>\Testo\Codecov\Covers</attr> on the child) are valid.
 :::
+
+### Excluding Code
+
+Some code is unreachable from tests on purpose: a defensive guard, a branch for another platform, a debug helper. Mark it with the `@codeCoverageIgnore` annotation, and it leaves the reports altogether instead of counting as uncovered:
+
+- `// @codeCoverageIgnore` excludes the line it sits on. The comment must hold nothing else — `// @codeCoverageIgnore because…` excludes nothing.
+- `// @codeCoverageIgnoreStart` and `// @codeCoverageIgnoreEnd` exclude every line between them, inclusive. A `Start` without a matching `End` excludes nothing.
+- `@codeCoverageIgnore` anywhere in the docblock of a class, trait, enum, function, or method excludes the whole declaration.
+
+```php
+if ($handle === false) {
+    exit(1); // @codeCoverageIgnore
+}
+
+// @codeCoverageIgnoreStart
+if (\PHP_OS_FAMILY === 'Windows') {
+    $path = \strtolower($path);
+}
+// @codeCoverageIgnoreEnd
+
+/**
+ * @codeCoverageIgnore
+ */
+public function debugDump(): void { ... }
+```
+
+The annotations apply to files no test loaded as well.
 
 ### Metadata
 
